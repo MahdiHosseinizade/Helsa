@@ -37,7 +37,6 @@ const TextSumm = () => {
             throw new Error("خطا در پاسخ به API");
         }
     } catch (error) {
-        console.error(error);
         toast.error("خطا در ارسال یا دریافت پاسخ"); 
     }
 };

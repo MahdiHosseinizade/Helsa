@@ -73,7 +73,6 @@ export default function DescriptionCourse({ courseInfo }) {
 
         setReloadKey((prev) => prev + 1);
       } catch (error) {
-        console.error("Error during enrollment:", error);
         toast.error("خطا در ثبت نام دوره");
       }
     }
@@ -102,7 +101,6 @@ export default function DescriptionCourse({ courseInfo }) {
           setCourseShopping(false);
         }
       } catch (error) {
-        console.error("Error fetching verification data:", error);
         toast.error("خطا در بررسی دوره");
         setCourseShopping(false);
       }

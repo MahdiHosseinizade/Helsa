@@ -22,7 +22,6 @@ export const AuthProvider = ({children}) => {
             setUser(null);
          }
       } catch (error) {
-         console.error("Error fetching user data:", error);
          setUser(null);
       }
    };
@@ -47,7 +46,6 @@ export const AuthProvider = ({children}) => {
          setRefreshToken(refresh);
          return access;
       } catch (error) {
-         console.error("Error refreshing token:", error);
          logout();
       }
    };
