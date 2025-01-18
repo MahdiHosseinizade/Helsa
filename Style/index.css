@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+   font-family: iranSans;
+   src: url(../fonts/DanaFaNum-Medium.woff);
+}
+
+* {
+   font-family: iranSans !important;
+}
+
+@media only screen and (max-width: 980px) {
+   .back1,
+   .back2 {
+      background-size: contain;
+   }
+}
+@media only screen and (min-width: 980px) {
+   .back1,
+   .back2 {
+      background-size: initial;
+   }
+}
+
+.h1Template ul {
+   list-style: disc;
+   display: grid;
+   gap: 20px;
+   padding-right: 10px;
+}
+
+.h1Template :is(li, p) {
+   font-size: 16px;
+   font-weight: 500;
+}
+
+.h1Template :is(h1, h2, h3, div) {
+   margin: 40px 0 15px;
+   font-size: 22px;
+   font-weight: 600;
+   color: black;
+}

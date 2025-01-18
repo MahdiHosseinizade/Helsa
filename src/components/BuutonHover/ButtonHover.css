@@ -1,0 +1,30 @@
+.btnHover {
+   padding: 20px;
+   width: max-content;
+   margin: auto;
+   position: relative;
+   margin-top: 32px;
+   z-index: 5;
+   color: white;
+}
+
+.btnHover::before {
+   content: "";
+   background-color: #db0eb7;
+   position: absolute;
+   width: 50%;
+   height: 100%;
+   z-index: -2;
+   top: 0;
+   left: 0;
+   transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.btnHover:hover::before {
+   width: 100%;
+}
+@media (min-width: 776px) {
+   .btnHover {
+      font-size: 20px;
+   }
+}
