@@ -79,7 +79,7 @@ export default function Header() {
             {/* Logo */}
             <div className='flex flex-row gap-4 items-center'>
                <Link to='/'>
-                  <img className='h-10 w-10' src='/img/logo.png' alt='Logo of Helsa' />
+                  <img className='h-10 w-10' src='/img/logo1.png' alt='' />
                </Link>
                <div>
                   {user ? (

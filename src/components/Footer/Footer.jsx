@@ -11,7 +11,7 @@ export default function Footer() {
          <div className='border-pink border'>
             <div className='md:grid md:grid-cols-4 container px-10  py-20 items-center '>
                <div className='col-span-2 md:hidden mb-10'>
-                  <img src='/img/logo.png' className='w-10 mx-auto' alt='Logo of Helsa' />
+                  <img src='/img/logo1.png' className='w-10 mx-auto' alt='' />
                </div>
                <div className='flex flex-col-reverse md:flex-row gap-y-10 gap-20  md:col-span-2'>
                   <div>
@@ -35,7 +35,7 @@ export default function Footer() {
                </div>
 
                <div className='col-span-2 md:block hidden'>
-                  <img src='/img/logo.png' className='w-20 rounded-md mx-auto' alt='Logo of Helsa' />
+                  <img src='/img/logo1.png' className='w-20 rounded-md mx-auto' alt='' />
                </div>
             </div>
          </div>

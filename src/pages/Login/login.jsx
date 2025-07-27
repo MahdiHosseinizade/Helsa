@@ -38,8 +38,8 @@ const Login = () => {
                <div className="hidden md:flex flex-col items-center justify-center w-1/3 bg-gradient-to-b from-purple-600 to-blue-900 p-6">
                   <img
                      className="h-20 w-auto mb-4 rounded-md"
-                     src="/img/logo.png"
-                     alt="Logo of Helsa"
+                     src="/img/logo1.png"
+                     alt=""
                   />
                   <h2 className="text-white text-2xl font-semibold">
                      به وبسایت هلسا خوش آمدید

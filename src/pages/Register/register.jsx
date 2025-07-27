@@ -13,6 +13,9 @@ const Register = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      phone: "",
+      education: "",
+      job: "",
    });
 
    const [showPassword, setShowPassword] = useState(false);
@@ -34,8 +37,8 @@ const Register = () => {
          return;
       }
       try {
-         delete formData.confirmPassword;
-         await register(formData);
+         const { confirmPassword, ...dataToSubmit } = formData; 
+         await register(dataToSubmit);
       } catch (error) {
          console.log(error);
       }
@@ -49,8 +52,8 @@ const Register = () => {
                <div className="hidden md:flex flex-col items-center justify-center w-1/3 bg-gradient-to-b from-purple-600 to-blue-900 p-6">
                   <img
                      className="h-20 w-auto mb-4 rounded-md"
-                     src="/img/logo.png"
-                     alt="Logo of Helsa"
+                     src="/img/logo1.png"
+                     alt=""
                   />
                   <h2 className="text-white text-2xl font-semibold">
                      به وبسایت هلسا خوش آمدید
@@ -130,6 +133,57 @@ const Register = () => {
                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
                         />
                      </div>
+                     <div className="mb-4">
+                        <label
+                           htmlFor="phone"
+                           className="block text-gray-700 font-medium mb-2"
+                        >
+                           شماره تلفن:
+                        </label>
+                        <input
+                           type="text"
+                           id="phone"
+                           name="phone"
+                           value={formData.phone}
+                           onChange={handleChange}
+                           required
+                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        />
+                     </div>
+                     <div className="mb-4">
+                        <label
+                           htmlFor="education"
+                           className="block text-gray-700 font-medium mb-2"
+                        >
+                           تحصیلات:
+                        </label>
+                        <input
+                           type="text"
+                           id="education"
+                           name="education"
+                           value={formData.education}
+                           onChange={handleChange}
+                           required
+                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        />
+                     </div>
+                     <div className="mb-4">
+                        <label
+                           htmlFor="job"
+                           className="block text-gray-700 font-medium mb-2"
+                        >
+                           شغل:
+                        </label>
+                        <input
+                           type="text"
+                           id="job"
+                           name="job"
+                           value={formData.job}
+                           onChange={handleChange}
+                           required
+                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        />
+                     </div>
                      <div className="mb-4 relative">
                         <label
                            htmlFor="password"
@@ -179,7 +233,6 @@ const Register = () => {
                         </button>
                      </div>
                      <button
-                        onClick={handleSubmit}
                         type="submit"
                         className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-200"
                      >

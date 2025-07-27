@@ -37,8 +37,12 @@ export default function DescriptionCourse({ courseInfo }) {
   const [open, setOpen] = React.useState(false);
   const [courseShopping, setCourseShopping] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  const [discountCode, setDiscountCode] = useState("");
+const [discountResult, setDiscountResult] = useState(null);
+const [checkingDiscount, setCheckingDiscount] = useState(false);
   const { courseName } = useParams();
   let token = localStorage.getItem("accessToken");
+
 
   const handleOpen = () => {
     if (token) {
@@ -77,6 +81,37 @@ export default function DescriptionCourse({ courseInfo }) {
       }
     }
   };
+
+const checkDiscount = async () => {
+  if (!discountCode) return toast.error("لطفاً کد تخفیف را وارد کنید");
+
+  setCheckingDiscount(true);
+
+  try {
+    const res = await axios.get(
+      `https://helsa-api.liara.run/courses/${courseName}/check_discount`,
+      {
+        params: { discount_code: discountCode },
+        headers: { Authorization: `JWT ${token}` },
+      }
+    );
+
+    if (res.status >= 200 && res.status < 300) {
+      setDiscountResult(res.data);
+      toast.success("کد تخفیف معتبر است!");
+    } else {
+      toast.error("کد تخفیف نامعتبر است.");
+      setDiscountResult(null);
+    }
+  } catch (error) {
+    toast.error("خطا در بررسی کد تخفیف");
+    setDiscountResult(null);
+  } finally {
+    setCheckingDiscount(false);
+  }
+};
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -201,6 +236,32 @@ export default function DescriptionCourse({ courseInfo }) {
         <div className="text-center text-2xl font-semibold text-gray-700 mb-8">
           آیا از خرید دوره اطمینان دارید؟
         </div>
+       
+        <div className="mb-6 text-center">
+          <p className="text-gray-600 mb-2">کد تخفیف دارید؟</p>
+          <input
+            type="text"
+            className="border px-4 py-2 rounded-lg w-full"
+            placeholder="کد تخفیف را وارد کنید"
+            value={discountCode}
+            onChange={(e) => setDiscountCode(e.target.value)}
+          />
+          <Button
+            className="mt-3 bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg"
+            onClick={checkDiscount}
+            disabled={checkingDiscount}
+          >
+            {checkingDiscount ? "در حال بررسی..." : "اعمال کد تخفیف"}
+          </Button>
+          {discountResult && (
+            <div className="mt-4 text-green-600">
+              ✅ {discountResult?.message || "تخفیف با موفقیت اعمال شد!"}
+            </div>
+          )}
+        </div>
+
+
+
 
         <DialogFooter className="flex justify-center">
           <Button
