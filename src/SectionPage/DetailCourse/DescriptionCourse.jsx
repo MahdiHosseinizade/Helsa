@@ -45,39 +45,59 @@ export default function DescriptionCourse({ courseInfo }) {
   const { courseName } = useParams();
   const token = localStorage.getItem("accessToken");
 
+  const SPECIAL_COURSE_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSf_03MTgZbFFwzylpKR9n4C1HOi4wETXpfjFm-3E0wlW6gxow/viewform";
+
   const handleOpen = () => {
-    if (!token) return toast.error("برای خرید دوره لطفا وارد سایت شوید");
-    setOpen(!open);
+
+    if (!token) {
+      return toast.error("برای خرید دوره لطفا وارد سایت شوید");
+    }
+
+    if (courseName === "23" || Number(courseName) === 23) {
+      window.location.href = SPECIAL_COURSE_LINK;
+      return;
+    }
+
+    setOpen((prev) => !prev);
   };
 
   const clickHandlerCourse = async () => {
-    if (!token) return;
+    if (!token) {
+      return;
+    }
+
     try {
       const url = discountCode
-        ? `https://helsa-api.liara.run/courses/${courseName}/enroll/?discount_code=${encodeURIComponent(discountCode)}`
+        ? `https://helsa-api.liara.run/courses/${courseName}/enroll/?discount_code=${encodeURIComponent(
+            discountCode
+          )}`
         : `https://helsa-api.liara.run/courses/${courseName}/enroll/`;
-  
+
+
       const res = await fetch(url, {
         method: "POST",
         headers: { Authorization: `JWT ${token}` },
       });
-  
+
+
       if (!res.ok) throw new Error(`Enrollment failed with status ${res.status}`);
-  
+
       const data = await res.json();
       if (data.authority) {
         localStorage.setItem(`authority_${courseName}`, data.authority);
       }
-  
+
       setOpen(false);
-      location.href = data.url;
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+
       setReloadKey((prev) => prev + 1);
     } catch (error) {
       toast.error("خطا در ثبت نام دوره");
     }
   };
-  
-  
 
   const checkDiscount = async () => {
     if (!discountCode) return toast.error("لطفاً کد تخفیف را وارد کنید");
@@ -95,6 +115,7 @@ export default function DescriptionCourse({ courseInfo }) {
         }
       );
 
+
       if (res.status >= 200 && res.status < 300) {
         setDiscountResult(res.data);
         toast.success("کد تخفیف معتبر است!");
@@ -102,6 +123,7 @@ export default function DescriptionCourse({ courseInfo }) {
         setDiscountError("کد تخفیف نامعتبر است.");
       }
     } catch (error) {
+      console.error("checkDiscount error:", error);
       setDiscountError("خطا در بررسی کد تخفیف");
     } finally {
       setCheckingDiscount(false);
@@ -122,13 +144,15 @@ export default function DescriptionCourse({ courseInfo }) {
           }
         );
 
+
         if (res.status >= 200 && res.status < 300) {
           toast.success(res.data.detail);
           setCourseShopping(true);
         } else {
           setCourseShopping(false);
         }
-      } catch {
+      } catch (err) {
+        console.error("verifyCourse error:", err);
         toast.error("خطا در بررسی دوره");
         setCourseShopping(false);
       }
@@ -153,63 +177,62 @@ export default function DescriptionCourse({ courseInfo }) {
           <ItemBox icon={<LuClock />} title="مدت زمان دوره (ساعت):" desc={courseInfo.length} />
 
           <ItemBox
-  icon={<MdOutlineAttachMoney />}
-  title="شهریه:"
-  desc={
-    <div className="flex items-baseline gap-2">
-      {discountResult?.new_price ? (
-        <>
-          <span className="line-through text-gray-400 text-lg">
-            {courseInfo.price?.toLocaleString()} ریال
-          </span>
-          <span className="text-green-600 font-bold text-xl">
-            {discountResult.new_price.toLocaleString()} ریال
-          </span>
-        </>
-      ) : (
-        <span className="text-lg">{courseInfo.price?.toLocaleString()} ریال</span>
-      )}
-    </div>
-  }
-/>
-<ItemBox
-  desc={
-    <>
-      <div className="flex gap-2 items-center">
-        <input
-          type="text"
-          className="border px-4 py-2 rounded-lg text-sm w-48"
-          placeholder="کد تخفیف ..."
-          value={discountCode}
-          onChange={(e) => setDiscountCode(e.target.value)}
-        />
-        <Button
-          size="sm"
-          className="bg-purple-500 hover:bg-purple-600 text-white text-sm px-4 py-2 rounded-lg"
-          onClick={checkDiscount}
-          disabled={checkingDiscount}
-        >
-          {checkingDiscount ? "در حال بررسی..." : "اعمال کد"}
-        </Button>
-      </div>
+            icon={<MdOutlineAttachMoney />}
+            title="شهریه:"
+            desc={
+              <div className="flex items-baseline gap-2">
+                {discountResult?.new_price ? (
+                  <>
+                    <span className="line-through text-gray-400 text-lg">
+                      {courseInfo.price?.toLocaleString()} ریال
+                    </span>
+                    <span className="text-green-600 font-bold text-xl">
+                      {discountResult.new_price.toLocaleString()} ریال
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-lg">{courseInfo.price?.toLocaleString()} ریال</span>
+                )}
+              </div>
+            }
+          />
 
-      {discountResult && (
-        <div className="text-green-600 text-sm mt-2">
-          ✅ {discountResult?.detail || "تخفیف با موفقیت اعمال شد!"}
-        </div>
-      )}
-      {discountError && (
-        <div className="text-red-500 text-sm mt-2">❌ {discountError}</div>
-      )}
-    </>
-  }
-/>
+          <ItemBox
+            desc={
+              <>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    className="border px-4 py-2 rounded-lg text-sm w-48"
+                    placeholder="کد تخفیف ..."
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                  />
+                  <Button
+                    size="sm"
+                    className="bg-purple-500 hover:bg-purple-600 text-white text-sm px-4 py-2 rounded-lg"
+                    onClick={checkDiscount}
+                    disabled={checkingDiscount}
+                  >
+                    {checkingDiscount ? "در حال بررسی..." : "اعمال کد"}
+                  </Button>
+                </div>
 
-
+                {discountResult && (
+                  <div className="text-green-600 text-sm mt-2">
+                    ✅ {discountResult?.detail || "تخفیف با موفقیت اعمال شد!"}
+                  </div>
+                )}
+                {discountError && (
+                  <div className="text-red-500 text-sm mt-2">❌ {discountError}</div>
+                )}
+              </>
+            }
+          />
 
           <ItemBox icon={<BsPersonLinesFill />} title="نوع برگزاری:" desc={courseInfo.attendance === "I" ? "حضوری" : "آنلاین"} />
           <ItemBox
-            icon={<FaHourglassStart />} 
+            icon={<FaHourglassStart />}
             title="زمان شروع کلاس:"
             desc={
               courseInfo.starts_at &&
@@ -217,10 +240,10 @@ export default function DescriptionCourse({ courseInfo }) {
             }
           />
           <ItemBox
-            icon={<BsCalendar4Week />} 
+            icon={<BsCalendar4Week />}
             title="روزهای برگزاری:"
             desc={
-              courseInfo.schedule.map((item, index) => (
+              courseInfo.schedule?.map((item, index) => (
                 <span
                   key={index}
                   className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
