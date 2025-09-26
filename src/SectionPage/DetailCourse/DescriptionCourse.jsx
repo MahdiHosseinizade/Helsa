@@ -177,30 +177,38 @@ export default function DescriptionCourse({ courseInfo }) {
           <ItemBox icon={<LuClock />} title="مدت زمان دوره (ساعت):" desc={courseInfo.length} />
 
           <ItemBox
-            icon={<MdOutlineAttachMoney />}
-            title="شهریه:"
-            desc={
-              <div className="flex items-baseline gap-2">
-                {discountResult?.new_price ? (
-                  <>
-                    <span className="line-through text-gray-400 text-lg">
-                      {courseInfo.price?.toLocaleString()} ریال
-                    </span>
-                    <span className="text-green-600 font-bold text-xl">
-                      {discountResult.new_price.toLocaleString()} ریال
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-lg">{courseInfo.price?.toLocaleString()} ریال</span>
-                )}
-              </div>
-            }
-          />
+  icon={<MdOutlineAttachMoney />}
+  title="شهریه:"
+  desc={
+    <div className="flex items-baseline gap-2">
+      {discountResult ? (
+        discountResult.new_price === 0 ? (
+          <span className="text-green-600 font-bold text-xl">رایگان</span>
+        ) : (
+          <>
+            <span className="line-through text-gray-400 text-lg">
+              {courseInfo.price?.toLocaleString()} ریال
+            </span>
+            <span className="text-green-600 font-bold text-xl">
+              {discountResult.new_price.toLocaleString()} ریال
+            </span>
+          </>
+        )
+      ) : (
+        <span className="text-lg">
+          {courseInfo.price?.toLocaleString()} ریال
+        </span>
+      )}
+    </div>
+  }
+/>
+
 
           <ItemBox
             desc={
               <>
-                <div className="flex gap-2 items-center">
+                {
+                  courseInfo.enrolled === false && <div className="flex gap-2 items-center">
                   <input
                     type="text"
                     className="border px-4 py-2 rounded-lg text-sm w-48"
@@ -217,6 +225,7 @@ export default function DescriptionCourse({ courseInfo }) {
                     {checkingDiscount ? "در حال بررسی..." : "اعمال کد"}
                   </Button>
                 </div>
+                }
 
                 {discountResult && (
                   <div className="text-green-600 text-sm mt-2">
@@ -257,12 +266,11 @@ export default function DescriptionCourse({ courseInfo }) {
       </div>
 
       <div className="flex justify-end mt-8">
-        {courseShopping ? (
+        {courseInfo.enrolled ? (
           <div className="text-center">
             <Button className="text-lg text-white bg-green-600 hover:bg-green-700 transition-all px-6 py-2 rounded-lg shadow-md">
               دوره خریداری شده است!
             </Button>
-            <p className="mt-3 text-gray-600">برای اطلاعات بیشتر تماس بگیرید...</p>
           </div>
         ) : (
           <Button
